@@ -1,9 +1,0 @@
-name: "SSL validate docs"
-description: "Validate that a mkdocs build produced a sane site/ output"
-
-runs:
-  using: "composite"
-  steps:
-    - name: Validate documentation build output
-      shell: bash
-      run: "${{ github.action_path }}/validate_docs.sh"

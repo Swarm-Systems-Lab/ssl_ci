@@ -8,17 +8,25 @@ into this repository instead of vendoring CI YAML and shell scripts in every pro
 
 ```
 .github/workflows/
-  ci.yml                 # workflow_call: test / pre-commit / lint / security / typecheck
-  publish.yml            # workflow_call: build + publish to PyPI on tag push
+  ci.yml                  # workflow_call: test / pre-commit / lint / security / typecheck
+  publish.yml             # workflow_call: build + publish to PyPI on tag push (pure Python)
+  publish-native.yml      # workflow_call: same, but via cibuildwheel for compiled-extension packages
   docs.yml                # workflow_call: build docs + deploy to GitHub Pages on tag push
   template-metatests.yml  # workflow_call: ssl_py_template's own template-generation tests
 
 actions/
-  env-setup/      # composite action: native build deps + uv-managed venv bootstrap
-  build/          # composite action: build dist/ artifacts via tox
-  publish-ci/     # composite action: twine upload using TWINE_* env vars
-  validate-docs/  # composite action: sanity-check a built mkdocs site/
+  env-setup/      # composite action: native build deps + bootstraps uv/just/ssl_pydev,
+                  # then delegates the actual venv sync to `ssl-pydev setup-env`
 ```
+
+`build`, `build-native`, `publish-ci`, and `validate-docs` used to be separate composite
+actions here, each wrapping its own copy of a shell script. They're gone now - the
+workflows call `ssl-pydev build` / `build-native` / `publish-ci` / `validate-docs`
+directly as a `run:` step. [`ssl_pydev`](https://github.com/Swarm-Systems-Lab/ssl_pydev)
+is the single source of truth for that logic; `env-setup` just makes sure it's installed
+before anything else runs. This means CI and local dev (`uv tool install ssl_pydev`) now
+share the exact same code, not two copies that started identical and would otherwise
+drift apart.
 
 Project-specific commands (`just test`, `just lint`, `just typecheck`, `just docs-build`,
 ...) stay in each project's own `justfile` — they're rendered per-project by the

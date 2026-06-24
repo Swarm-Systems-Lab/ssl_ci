@@ -37,7 +37,7 @@ jobs:
         run: just test-multi-py
 
       - name: Build package
-        uses: Swarm-Systems-Lab/ssl_ci/actions/build@v1
+        run: ssl-pydev build
 
       - name: Verify dist artifacts
         run: |
@@ -45,7 +45,7 @@ jobs:
           python -m twine check dist/*
 
       - name: Publish to PyPI
-        uses: Swarm-Systems-Lab/ssl_ci/actions/publish-ci@v1
+        run: ssl-pydev publish-ci
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}

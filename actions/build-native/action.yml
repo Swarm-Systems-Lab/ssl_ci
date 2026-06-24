@@ -1,9 +1,0 @@
-name: "SSL build native extension package"
-description: "Build sdist + cibuildwheel wheels into dist/ for a compiled-extension (pybind11/scikit-build-core) package"
-
-runs:
-  using: "composite"
-  steps:
-    - name: Build distribution artifacts (sdist + cibuildwheel)
-      shell: bash
-      run: "${{ github.action_path }}/build_native.sh"

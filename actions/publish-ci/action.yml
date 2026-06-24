@@ -1,9 +1,0 @@
-name: "SSL publish (CI)"
-description: "Publish dist/ artifacts to a PyPI-compatible index via twine, using credentials from the environment"
-
-runs:
-  using: "composite"
-  steps:
-    - name: Publish with twine
-      shell: bash
-      run: "${{ github.action_path }}/publish_ci.sh"

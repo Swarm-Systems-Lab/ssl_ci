@@ -55,7 +55,7 @@ jobs:
         run: just test-multi-py
 
       - name: Build native extension package
-        uses: Swarm-Systems-Lab/ssl_ci/actions/build-native@v1
+        run: ssl-pydev build-native
         env:
           CIBW_ENVIRONMENT: "SETUPTOOLS_SCM_PRETEND_VERSION=${SETUPTOOLS_SCM_PRETEND_VERSION}"
           CIBW_ENVIRONMENT_PASS_LINUX: "SETUPTOOLS_SCM_PRETEND_VERSION"
@@ -71,7 +71,7 @@ jobs:
           python -m twine check dist/*
 
       - name: Publish to PyPI
-        uses: Swarm-Systems-Lab/ssl_ci/actions/publish-ci@v1
+        run: ssl-pydev publish-ci
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}

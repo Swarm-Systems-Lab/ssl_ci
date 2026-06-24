@@ -31,7 +31,7 @@ jobs:
         run: just docs-build
 
       - name: Validate documentation build output
-        uses: Swarm-Systems-Lab/ssl_ci/actions/validate-docs@v1
+        run: ssl-pydev validate-docs
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
