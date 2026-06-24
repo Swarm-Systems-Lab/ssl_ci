@@ -6,6 +6,10 @@ inputs:
     description: "Comma-separated list of optional-dependency extras to pass to uv sync --extra"
     required: false
     default: ""
+  ssl_pydev_version:
+    description: "Pinned version of the ssl_pydev CLI to install"
+    required: false
+    default: "0.1.2"
 
 runs:
   using: "composite"
@@ -23,6 +27,8 @@ runs:
 
     - name: Bootstrap Python environment
       shell: bash
+      env:
+        SSL_PYDEV_VERSION: ${{ inputs.ssl_pydev_version }}
       run: |
         if [ -n "${{ inputs.extras }}" ]; then
           "${{ github.action_path }}/setup-env.sh" --extras "${{ inputs.extras }}"

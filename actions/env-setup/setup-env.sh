@@ -16,9 +16,10 @@ if ! command -v just >/dev/null 2>&1; then
 	export PATH="$HOME/.local/bin:$PATH"
 fi
 
-if ! command -v ssl-pydev >/dev/null 2>&1; then
-	uv tool install ssl_pydev
-fi
+# Pinned, not "latest" - a breaking ssl_pydev release shouldn't break every
+# repo's CI at once. Bump this deliberately (new ssl_ci release) to roll out.
+SSL_PYDEV_VERSION="${SSL_PYDEV_VERSION:-0.1.2}"
+uv tool install "ssl_pydev==${SSL_PYDEV_VERSION}"
 
 UV_TOOL_BIN="$(uv tool dir --bin)"
 export PATH="$UV_TOOL_BIN:$PATH"
