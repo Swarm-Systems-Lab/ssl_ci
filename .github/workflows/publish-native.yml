@@ -38,6 +38,10 @@ jobs:
 
       - name: Extract version from tag
         run: |
+          if [[ "$GITHUB_REF" != refs/tags/v* ]]; then
+            echo "Expected a 'refs/tags/v*' ref, got '$GITHUB_REF' - refusing to fabricate a version" >&2
+            exit 1
+          fi
           VERSION="${GITHUB_REF#refs/tags/v}"
           echo "SETUPTOOLS_SCM_PRETEND_VERSION=$VERSION" >> "$GITHUB_ENV"
           echo "Using version: $VERSION"

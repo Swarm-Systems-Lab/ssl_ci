@@ -21,7 +21,12 @@ jobs:
 
       - name: Extract version
         id: version
-        run: echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+        run: |
+          if [[ "$GITHUB_REF" != refs/tags/v* ]]; then
+            echo "Expected a 'refs/tags/v*' ref, got '$GITHUB_REF' - refusing to fabricate a version" >&2
+            exit 1
+          fi
+          echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
 
       - name: Setup system and python environment
         uses: Swarm-Systems-Lab/ssl_ci/actions/env-setup@v1
