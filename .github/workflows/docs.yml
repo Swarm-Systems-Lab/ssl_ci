@@ -24,6 +24,8 @@ jobs:
 
       - name: Setup system and python environment
         uses: Swarm-Systems-Lab/ssl_ci/actions/env-setup@v1
+        with:
+          extras: dev
 
       - name: Build documentation
         run: just docs-build
