@@ -1,0 +1,47 @@
+name: Reusable Template Metatests
+
+on:
+  workflow_call:
+
+jobs:
+  template-tests:
+    name: Test Template Generation
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python environment
+        run: |
+          if ! command -v uv >/dev/null 2>&1; then
+            curl -LsSf https://astral.sh/uv/install.sh | sh
+            export PATH="$HOME/.local/bin:$PATH"
+          fi
+
+          if ! command -v just >/dev/null 2>&1; then
+            curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
+            export PATH="$HOME/.local/bin:$PATH"
+          fi
+
+      - name: Setup template development environment
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          just setup
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "CI"
+          git config --global user.email "ci@example.com"
+
+      # ---- BLOCKING CHECK ----
+      - name: Template metatests (gate)
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          just test
+
+      - name: Lint template code
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          just lint

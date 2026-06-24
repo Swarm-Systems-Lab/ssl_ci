@@ -1,0 +1,9 @@
+name: "SSL build package"
+description: "Build Python distribution artifacts into dist/ using tox"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build distribution artifacts
+      shell: bash
+      run: "${{ github.action_path }}/build.sh"

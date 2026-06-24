@@ -1,0 +1,47 @@
+name: Reusable Publish
+
+on:
+  workflow_call:
+    secrets:
+      PYPI_USERNAME:
+        required: false
+      PYPI_PASSWORD:
+        required: true
+      PYPI_REPOSITORY_URL:
+        required: false
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Extract version
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup system and python environment
+        uses: Swarm-Systems-Lab/ssl_ci/actions/env-setup@v1
+        with:
+          extras: dev,release
+
+      - name: Unit tests (gate)
+        run: just test-multi-py
+
+      - name: Build package
+        uses: Swarm-Systems-Lab/ssl_ci/actions/build@v1
+
+      - name: Verify dist artifacts
+        run: |
+          . .venv/bin/activate
+          python -m twine check dist/*
+
+      - name: Publish to PyPI
+        uses: Swarm-Systems-Lab/ssl_ci/actions/publish-ci@v1
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+          TWINE_REPOSITORY_URL: ${{ secrets.PYPI_REPOSITORY_URL }}
