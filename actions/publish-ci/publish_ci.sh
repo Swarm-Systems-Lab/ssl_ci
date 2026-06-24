@@ -22,6 +22,6 @@ if [ ! -d dist ] || [ -z "$(ls -A dist 2>/dev/null)" ]; then
 fi
 
 echo "Publishing artifacts from dist/ using twine"
-python -m twine upload --non-interactive --repository-url "$TWINE_REPOSITORY_URL" dist/*
+python -m twine upload --verbose --non-interactive --repository-url "$TWINE_REPOSITORY_URL" dist/*
 
 echo "Publish finished"
