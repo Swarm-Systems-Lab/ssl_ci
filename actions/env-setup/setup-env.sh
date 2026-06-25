@@ -18,7 +18,7 @@ fi
 
 # Pinned, not "latest" - a breaking ssl_pydev release shouldn't break every
 # repo's CI at once. Bump this deliberately (new ssl_ci release) to roll out.
-SSL_PYDEV_VERSION="${SSL_PYDEV_VERSION:-0.1.2}"
+SSL_PYDEV_VERSION="${SSL_PYDEV_VERSION:-0.1.3}"
 uv tool install "ssl_pydev==${SSL_PYDEV_VERSION}"
 
 UV_TOOL_BIN="$(uv tool dir --bin)"

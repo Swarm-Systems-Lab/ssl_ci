@@ -9,7 +9,7 @@ inputs:
   ssl_pydev_version:
     description: "Pinned version of the ssl_pydev CLI to install"
     required: false
-    default: "0.1.2"
+    default: "0.1.3"
 
 runs:
   using: "composite"
