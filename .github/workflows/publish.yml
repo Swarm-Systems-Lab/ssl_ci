@@ -36,7 +36,9 @@ jobs:
           extras: dev,release
 
       - name: Unit tests (gate)
-        run: just test-multi-py
+        run: |
+          if just --summary | tr ' ' '\n' | grep -qx test-multi-py; then just test-multi-py
+          else echo "::notice::No 'test-multi-py' recipe - skipping"; fi
 
       - name: Build package
         run: ssl-pydev build

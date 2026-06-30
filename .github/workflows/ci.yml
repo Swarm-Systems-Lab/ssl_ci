@@ -21,19 +21,31 @@ jobs:
           extras: dev
 
       # ---- BLOCKING CHECK ----
+      # Projects can toggle dev-tooling recipes off skipped - not failed - 
+      # when the project doesn't define that recipe.
       - name: Unit tests (gate)
-        run: just test
+        run: |
+          if just --summary | tr ' ' '\n' | grep -qx test; then just test
+          else echo "::notice::No 'test' recipe - skipping"; fi
 
       - name: pre-commit checks
-        run: just pre-commit
+        run: |
+          if just --summary | tr ' ' '\n' | grep -qx pre-commit; then just pre-commit
+          else echo "::notice::No 'pre-commit' recipe - skipping"; fi
 
       - name: Lint
-        run: just lint
+        run: |
+          if just --summary | tr ' ' '\n' | grep -qx lint; then just lint
+          else echo "::notice::No 'lint' recipe - skipping"; fi
 
       - name: Security scans
         continue-on-error: true
-        run: just security
+        run: |
+          if just --summary | tr ' ' '\n' | grep -qx security; then just security
+          else echo "::notice::No 'security' recipe - skipping"; fi
 
       - name: Typing checks
         continue-on-error: true
-        run: just typecheck
+        run: |
+          if just --summary | tr ' ' '\n' | grep -qx typecheck; then just typecheck
+          else echo "::notice::No 'typecheck' recipe - skipping"; fi

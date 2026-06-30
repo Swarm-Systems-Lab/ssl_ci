@@ -58,7 +58,13 @@ name: CI
 on:
   push:
     branches: ["**"]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
   pull_request:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
 jobs:
   ci:
     uses: Swarm-Systems-Lab/ssl_ci/.github/workflows/ci.yml@v1
