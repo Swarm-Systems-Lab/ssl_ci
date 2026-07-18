@@ -29,6 +29,14 @@ jobs:
         with:
           extras: dev
 
+      # Creates the Pages site and sets its source to "GitHub Actions" if it is not
+      # configured yet. Without this, actions/deploy-pages sits in "deployment_queued"
+      # until it times out on repositories where Pages was never enabled.
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - name: Build documentation
         run: just docs-build
 
